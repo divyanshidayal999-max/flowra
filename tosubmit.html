@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FLOWRA AI Kumbh Full System</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- LEAFLET -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+body{
+margin:0;
+font-family:Rajdhani;
+background:#050814;
+color:white;
+}
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+.title{
+font-size:52px;
+font-family:Orbitron;
+color:#22d3ee;
+}
+
+.btn{
+padding:14px 22px;
+margin-top:20px;
+background:#22d3ee;
+border:none;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.app{display:none;}
+
+.tab{display:none;padding:15px;}
+.active-tab{display:block;}
+
+.card{
+background:rgba(255,255,255,0.06);
+padding:15px;
+margin-bottom:12px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.vertical-scroll{
+display:flex;
+flex-direction:column;
+gap:12px;
+max-height:65vh;
+overflow-y:auto;
+}
+
+.nav{
+position:fixed;
+bottom:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+background:#000;
+padding:10px;
+}
+
+.nav div{opacity:0.5;cursor:pointer;}
+.nav .on{opacity:1;color:#22d3ee;}
+
+.modal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+}
+
+.box{
+background:#0b1220;
+padding:18px;
+border-radius:12px;
+width:92%;
+max-width:420px;
+}
+
+input,select{
+width:100%;
+padding:8px;
+margin-top:6px;
+border-radius:6px;
+border:none;
+}
+
+button{
+width:100%;
+margin-top:10px;
+padding:10px;
+background:#22d3ee;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.close{
+background:#ff4d4d;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero" id="hero">
+<div class="title">FLOWRA AI</div>
+<button class="btn" onclick="startApp()">Enter System</button>
+</div>
+
+<div class="app" id="app">
+
+<!-- HOME -->
+<div id="home" class="tab active-tab">
+<div class="card">
+<h2>📍 Current</h2>
+<p>AHPS</p>
+<p>🚦 Traffic: Moderate</p>
+</div>
+
+<div class="card">
+<h3>🗺 Live Location</h3>
+<div id="map" style="height:260px;border-radius:12px;"></div>
+</div>
+</div>
+
+<!-- LIVE -->
+<!-- CURRENT INSIGHTS (UPGRADED LIVE SCENARIO) -->
+<div id="predictionTab" class="tab">
+
+<div class="card">
+<h3>📊 Current Insights (Haridwar Live Grid)</h3>
+</div>
+
+<div class="vertical-scroll">
+
+<!-- HAR KI PAURI -->
+<div class="card mini">
+<h3>🛕 Har Ki Pauri</h3>
+
+<p><b>🔴 Current Scenario:</b> Heavy congestion, high pilgrim movement near ghat</p>
+<p>🚦 Status: Heavy Flow</p>
+
+<p>📈 Next 20 min: Peak congestion expected (increasing crowd density)</p>
+<p>🕒 Best Time: 05:00–06:30 AM (lowest footfall window today)</p>
+<p>🧠 Insight: Ganga Aarti surge causes sharp crowd spike after 16:30</p>
+</div>
+
+<!-- RAILWAY -->
+<div class="card mini">
+<h3>🚉 Railway Station</h3>
+
+<p><b>🟠 Current Scenario:</b> Train arrivals causing intermittent crowd bursts</p>
+<p>🚦 Status: Moderate Flow</p>
+
+<p>📈 Next 15 min: High arrival spike expected (platform crowding likely)</p>
+<p>🕒 Best Time: 10:45–11:30 AM (lowest congestion window)</p>
+<p>🧠 Insight: Morning train clusters (08:00–11:00) create wave-like rush</p>
+</div>
+
+<!-- BUS STAND -->
+<div class="card mini">
+<h3>🚌 Bus Stand</h3>
+
+<p><b>🟡 Current Scenario:</b> Balanced movement with occasional rush bursts</p>
+<p>🚦 Status: Moderate Flow</p>
+
+<p>📈 Next 25 min: Stable movement with slight fluctuations</p>
+<p>🕒 Best Time: 11:45–13:15 PM (least crowd pressure window)</p>
+<p>🧠 Insight: Evening 17:00–19:00 shows pilgrimage-driven surge</p>
+</div>
+
+<!-- JWALAPUR -->
+<div class="card mini">
+<h3>🏙 Jwalapur</h3>
+
+<p><b>🟢 Current Scenario:</b> Market traffic active but not congested yet</p>
+<p>🚦 Status: Light–Moderate Flow</p>
+
+<p>📈 Next 20 min: Gradual increase expected due to market buildup</p>
+<p>🕒 Best Time: 09:40–10:50 AM (smoothest traffic window)</p>
+<p>🧠 Insight: Retail zone peaks strongly between 18:00–20:00</p>
+</div>
+
+<!-- SINGHDWAR -->
+<div class="card mini">
+<h3>🚪 Singhdwar</h3>
+
+<p><b>🟠 Current Scenario:</b> Entry gate pressure rising due to incoming visitors</p>
+<p>🚦 Status: Moderate Flow</p>
+
+<p>📈 Next 15 min: Crowd buildup likely at checkpoint</p>
+<p>🕒 Best Time: 06:10–07:20 AM (minimal entry queue)</p>
+<p>🧠 Insight: Pre-ritual entry congestion before midday increases sharply</p>
+</div>
+
+</div>
+</div>
+<!-- PARKING -->
+<div id="parking" class="tab">
+
+<div class="card"><h2>🅿 Parking </h2></div>
+
+<div class="vertical-scroll">
+
+<!-- HAR KI PAURI -->
+<div class="card" onclick="openParking('Har Ki Pauri Parking',0.4,'₹60/hr','VERY HIGH','Main Ghat Entry Zone','BEST FOR: shortest walking distance','Near Ganga Aarti Zone')">
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <b>Har Ki Pauri Parking</b>
+  <span style="background:#22d3ee;color:#000;padding:4px 10px;border-radius:8px;font-weight:bold;">₹60/hr</span>
+</div>
+
+<p>Distance: 5.3km</p>
+<p>Density: Very High</p>
+<p>Best: Fast Ghat Access</p>
+
+</div>
+
+<!-- RAILWAY -->
+<div class="card" onclick="openParking('Railway Station Parking',1.2,'₹35/hr','MEDIUM','Transport Hub Zone','BEST FOR: train users','Connected to city exit')">
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <b>Railway Parking</b>
+  <span style="background:#22d3ee;color:#000;padding:4px 10px;border-radius:8px;font-weight:bold;">₹35/hr</span>
+</div>
+
+<p>Distance: 4.2 km</p>
+<p>Density: Medium</p>
+<p>Best: Transit Users</p>
+
+</div>
+
+<!-- JWALAPUR -->
+<div class="card" onclick="openParking('Jwalapur Parking',2.5,'₹25/hr','LOW','Residential Edge Zone','BEST FOR: budget parking','Safe outer zone')">
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <b>Jwalapur Parking</b>
+  <span style="background:#22d3ee;color:#000;padding:4px 10px;border-radius:8px;font-weight:bold;">₹25/hr</span>
+</div>
+
+<p>Distance: 3.5 km</p>
+<p>Density: Low</p>
+<p>Best: Budget Option</p>
+
+</div>
+
+<!-- CITY EDGE PARKING (UPDATED) -->
+<div class="card" onclick="openParking('City Edge Parking',4.0,'₹20/hr','LOW-MEDIUM','City Boundary Zone','BEST FOR: overflow','Peak crowd backup')">
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <b>City Edge Parking</b>
+  <span style="background:#22d3ee;color:#000;padding:4px 10px;border-radius:8px;font-weight:bold;">₹20/hr</span>
+</div>
+
+<p>Distance: 8.0 km</p>
+<p>Density: Low-Medium</p>
+<p>Best: Overflow Parking</p>
+
+</div>
+
+</div>
+</div>
+
+<!-- KUMBH -->
+<div id="kumbh" class="tab">
+
+<div class="card">
+<h2>🛕 Kumbh 2027</h2>
+<p style="color:#ff4d4d;font-weight:bold;">NO SNAN TODAY</p>
+</div>
+
+<div class="card">
+<h3>📅 Snan Days List</h3>
+<p>Mauni Amavasya</p>
+<p>Basant Panchami</p>
+<p>Makar Sankranti</p>
+<p>Kartik Purnima</p>
+</div>
+
+<div class="card">
+<h3>🚶 Pedestrian Routes</h3>
+<p>Main Route: Railway → Bus Stand → Har Ki Pauri</p>
+<p>Secondary Route: Jwalapur → Vishnu Ghat → Inner Ghats</p>
+<p>Safe Route: Outer Ring Walking Corridor</p>
+<p>Emergency Route: City boundary exit paths</p>
+</div>
+
+<!-- GHATS UPDATED -->
+<div class="card">
+<h3>🌊 Ghats </h3>
+
+<div class="card">
+<b>Har Ki Pauri</b>
+<p>🔥 Crowd: Very High</p>
+<p>⏰ Best Time: Early Morning / Late Night</p>
+<p>📍 Status: Avoid Peak Hours</p>
+</div>
+
+<div class="card">
+<b>Vishnu Ghat</b>
+<p>⚖ Crowd: Medium</p>
+<p>⏰ Best Time: Afternoon</p>
+<p>📍 Status: Manageable Flow</p>
+</div>
+
+<div class="card">
+<b>Birla Ghat</b>
+<p>🌿 Crowd: Low</p>
+<p>⏰ Best Time: Anytime</p>
+<p>📍 Status: Best Safe Option</p>
+</div>
+
+<div class="card">
+<b>Subhash Ghat</b>
+<p>🚶 Crowd: Moderate</p>
+<p>⏰ Best Time: Morning</p>
+<p>📍 Status: Balanced Flow</p>
+</div>
+
+<div class="card">
+<b>Prem Nagar Ghat</b>
+<p>🌊 Crowd: Very Low</p>
+<p>⏰ Best Time: Anytime</p>
+<p>📍 Status: Peace Zone</p>
+</div>
+
+</div>
+
+<div class="card">
+<h3>🚗 Vehicle Entry Pass</h3>
+<button onclick="openVehicle()">Generate Pass</button>
+</div>
+
+<div class="card">
+<h3>🚌 Shuttle Pass</h3>
+<button onclick="openShuttle()">Generate Pass</button>
+</div>
+
+<div class="card">
+<h3>📝 Visitor Registration (FREE)</h3>
+<button onclick="openRegister()">Register</button>
+</div>
+
+</div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav">
+<div class="on" onclick="showTab('home',this)">🏠</div>
+<div onclick="showTab('predictionTab',this)">📊</div>
+<div onclick="showTab('parking',this)">🅿</div>
+<div onclick="showTab('kumbh',this)">🛕</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="box">
+<h3 id="title"></h3>
+<div id="content"></div>
+<button class="close" onclick="closeModal()">Close</button>
+</div>
+</div>
+
+<script>
+
+let map;
+
+function startApp(){
+document.getElementById("hero").style.display="none";
+document.getElementById("app").style.display="block";
+
+setTimeout(()=>initMap(),300);
+}
+
+function initMap(){
+map = L.map('map').setView([29.9457, 78.1642], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution:'© OpenStreetMap'
+}).addTo(map);
+
+L.marker([29.9457, 78.1642])
+.addTo(map)
+.bindPopup("AHPS")
+.openPopup();
+}
+
+function showTab(id,el){
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active-tab"));
+document.getElementById(id).classList.add("active-tab");
+document.querySelectorAll(".nav div").forEach(n=>n.classList.remove("on"));
+el.classList.add("on");
+}
+
+function openModal(t,h){
+document.getElementById("modal").style.display="flex";
+document.getElementById("title").innerText=t;
+document.getElementById("content").innerHTML=h;
+}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
+}
+
+function qr(){
+return `<div style="margin-top:10px;padding:10px;background:#111;border-radius:10px;">
+<b>💳 PAYMENT QR READY</b>
+</div>`;
+}
+
+function showQR(btn){
+btn.nextElementSibling.innerHTML = qr();
+btn.disabled = true;
+}
+
+function openParking(name,dist,price,density,location,best,extra){
+openModal(name,`
+<p><b>Distance:</b> ${dist} km</p>
+<p><b>Price:</b> ${price}</p>
+<p><b>Density:</b> ${density}</p>
+<p><b>Location:</b> ${location}</p>
+<p><b>Best For:</b> ${best}</p>
+<p><b>Info:</b> ${extra}</p>
+
+<hr>
+
+<input placeholder="Name">
+<input placeholder="Car Number">
+<input placeholder="Phone">
+<input type="date">
+<input type="time">
+
+<button onclick="showQR(this)">Pay & Book</button>
+<div></div>
+`);
+}
+
+function openVehicle(){
+openModal("Vehicle Entry Pass",`
+<input placeholder="Name">
+<input placeholder="Car Number">
+<input placeholder="Mobile">
+<input type="date">
+
+<p><b>Entry Fee:</b> ₹500-1000(dynamic)</p>
+
+<button onclick="showQR(this)">Pay & Generate</button>
+<div></div>
+`);
+}
+
+function openShuttle(){
+openModal("Shuttle Pass",`
+<input placeholder="Name">
+<input placeholder="Mobile">
+<input placeholder="Pickup">
+<input placeholder="Drop">
+
+<p><b>Fare:</b> ₹30 - ₹80</p>
+
+<button onclick="showQR(this)">Pay & Generate</button>
+<div></div>
+`);
+}
+
+function openRegister(){
+openModal("Visitor Registration",`
+<input placeholder="Name">
+<input placeholder="Mobile">
+<select>
+<option>Pilgrimage</option>
+<option>Tourism</option>
+<option>Work</option>
+</select>
+<input type="date">
+<button>Register</button>
+`);
+}
+
+</script>
+
+</body>
+</html>
